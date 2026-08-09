@@ -1,0 +1,168 @@
+<Window x:Class="NoRecoil.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NoRecoil - 鼠标宏"
+        Height="660"
+        Width="780"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="12">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- 总开关状态 -->
+    <Border Grid.Row="0"
+            Padding="12"
+            CornerRadius="6"
+            Background="#2B2B2B">
+      <StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Text="总开关："
+                     FontSize="16"
+                     Foreground="#DDDDDD"
+                     VerticalAlignment="Center"/>
+          <TextBlock x:Name="MasterStatusText"
+                     Text="OFF"
+                     FontSize="18"
+                     FontWeight="Bold"
+                     Foreground="#FF5252"
+                     VerticalAlignment="Center"/>
+          <TextBlock x:Name="ActiveStatusText"
+                     Text="   |   未激活"
+                     FontSize="15"
+                     Foreground="#999999"
+                     VerticalAlignment="Center"
+                     Margin="12,0,0,0"/>
+        </StackPanel>
+        <TextBlock Text="按键说明：按 L 键 切换总开关（ON/OFF）；总开关为 ON 时，按住鼠标左键激活宏，松开立即取消。"
+                   Foreground="#999999"
+                   Margin="0,8,0,0"
+                   TextWrapping="Wrap"/>
+        <TextBlock x:Name="QuickHintText"
+                   Text="O 已按下，请按数字键 1-9 快速切换配置..."
+                   Foreground="#FFD54F"
+                   Visibility="Collapsed"
+                   Margin="0,4,0,0"/>
+      </StackPanel>
+    </Border>
+
+    <!-- 配置文件列表（快速切换） -->
+    <GroupBox Grid.Row="1"
+              Header="配置文件（JsonRAW · 点击即切换 · O+数字键 快速切换）"
+              Margin="0,12,0,0"
+              Padding="8">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right"
+                    Margin="8,0,0,0"
+                    Width="72">
+          <Button x:Name="BtnNew"
+                  Content="新增"
+                  Padding="0,5"
+                  Margin="0,0,0,6"
+                  Click="BtnNew_Click"/>
+          <Button x:Name="BtnDelete"
+                  Content="删除"
+                  Padding="0,5"
+                  Margin="0,0,0,6"
+                  Click="BtnDelete_Click"/>
+          <Button x:Name="BtnRefresh"
+                  Content="刷新"
+                  Padding="0,5"
+                  Click="BtnRefresh_Click"/>
+        </StackPanel>
+        <ListBox x:Name="ProfileList"
+                 Height="132"
+                 SelectionChanged="ProfileList_SelectionChanged"/>
+      </DockPanel>
+    </GroupBox>
+
+    <!-- 编辑器 -->
+    <GroupBox Grid.Row="2"
+              Header="编辑当前配置"
+              Margin="0,12,0,0"
+              Padding="10">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 运行变量 -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,10">
+          <TextBlock Text="time4S（次/秒）"
+                     VerticalAlignment="Center"/>
+          <TextBox x:Name="Time4SText"
+                   Width="64"
+                   Margin="6,0,18,0"
+                   VerticalContentAlignment="Center"/>
+          <TextBlock Text="sustain（毫秒/次）"
+                     VerticalAlignment="Center"/>
+          <TextBox x:Name="SustainText"
+                   Width="64"
+                   Margin="6,0,18,0"
+                   VerticalContentAlignment="Center"/>
+          <TextBlock Text="smooth（段/次）"
+                     VerticalAlignment="Center"/>
+          <TextBox x:Name="SmoothText"
+                   Width="64"
+                   Margin="6,0,18,0"
+                   VerticalContentAlignment="Center"/>
+          <TextBlock Text="rad（随机/次）"
+                     VerticalAlignment="Center"/>
+          <TextBox x:Name="RadText"
+                   Width="64"
+                   Margin="6,0,0,0"
+                   VerticalContentAlignment="Center"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1"
+                   Text="移动步数（Ver=上下，正下负上；Hor=左右，正右负左；步数用完后保持最后一步）"
+                   Margin="0,0,0,4"/>
+        <DataGrid x:Name="StepsGrid"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="True"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal"
+                  SelectionMode="Single">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Ver（上下）"
+                                Binding="{Binding Ver, UpdateSourceTrigger=PropertyChanged}"
+                                Width="*"/>
+            <DataGridTextColumn Header="Hor（左右）"
+                                Binding="{Binding Hor, UpdateSourceTrigger=PropertyChanged}"
+                                Width="*"/>
+          </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,8,0,0">
+          <Button x:Name="BtnAddStep"
+                  Content="＋ 添加步数"
+                  Padding="10,5"
+                  Margin="0,0,6,0"
+                  Click="BtnAddStep_Click"/>
+          <Button x:Name="BtnRemoveStep"
+                  Content="－ 删除选中"
+                  Padding="10,5"
+                  Margin="0,0,18,0"
+                  Click="BtnRemoveStep_Click"/>
+          <Button x:Name="BtnSave"
+                  Content="保存"
+                  FontWeight="Bold"
+                  Padding="20,5"
+                  Click="BtnSave_Click"/>
+        </StackPanel>
+      </Grid>
+    </GroupBox>
+  </Grid>
+</Window>
