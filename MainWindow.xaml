@@ -1,7 +1,8 @@
 <Window x:Class="NoRecoil.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="NoRecoil - 鼠标宏"
+        Title="Worry-Free Recoil"
+        Icon="pack://application:,,,/WFP.ico"
         Height="660"
         Width="780"
         WindowStartupLocation="CenterScreen">
@@ -45,6 +46,38 @@
                    Foreground="#FFD54F"
                    Visibility="Collapsed"
                    Margin="0,4,0,0"/>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,8,0,0">
+          <TextBlock Text="触发方式："
+                     Foreground="#DDDDDD"
+                     VerticalAlignment="Center"/>
+          <RadioButton x:Name="RbtLeftOnly"
+                       Content="左键触发"
+                       Foreground="#DDDDDD"
+                       VerticalAlignment="Center"
+                       Margin="0,0,12,0"
+                       Checked="TriggerMode_Changed"/>
+          <RadioButton x:Name="RbtLeftRight"
+                       Content="左键+右键 触发"
+                       Foreground="#DDDDDD"
+                       VerticalAlignment="Center"
+                       Margin="0,0,12,0"
+                       Checked="TriggerMode_Changed"/>
+          <RadioButton x:Name="RbtLeftRightDigit"
+                       Content="数字键"
+                       Foreground="#DDDDDD"
+                       VerticalAlignment="Center"
+                       Margin="0,0,4,0"
+                       Checked="TriggerMode_Changed"/>
+          <ComboBox x:Name="DigitCombo"
+                    Width="48"
+                    VerticalContentAlignment="Center"
+                    SelectionChanged="DigitCombo_SelectionChanged"/>
+          <TextBlock Text="+ 左键+右键 触发（主键盘 1-0）"
+                     Foreground="#DDDDDD"
+                     VerticalAlignment="Center"
+                     Margin="4,0,0,0"/>
+        </StackPanel>
       </StackPanel>
     </Border>
 
@@ -95,7 +128,7 @@
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal"
                     Margin="0,0,0,10">
-          <TextBlock Text="time4S（次/秒）"
+          <TextBlock Text="time4S（次/分钟）"
                      VerticalAlignment="Center"/>
           <TextBox x:Name="Time4SText"
                    Width="64"
@@ -131,8 +164,29 @@
                   CanUserDeleteRows="True"
                   HeadersVisibility="Column"
                   GridLinesVisibility="Horizontal"
-                  SelectionMode="Single">
+                  SelectionMode="Single"
+                  AlternationCount="2">
+          <DataGrid.RowStyle>
+            <Style TargetType="DataGridRow">
+              <Style.Triggers>
+                <Trigger Property="AlternationIndex"
+                         Value="0">
+                  <Setter Property="Background"
+                          Value="#FFFFFF"/>
+                </Trigger>
+                <Trigger Property="AlternationIndex"
+                         Value="1">
+                  <Setter Property="Background"
+                          Value="#F2F2F2"/>
+                </Trigger>
+              </Style.Triggers>
+            </Style>
+          </DataGrid.RowStyle>
           <DataGrid.Columns>
+            <DataGridTextColumn Header="序号"
+                                Binding="{Binding Index}"
+                                IsReadOnly="True"
+                                Width="52"/>
             <DataGridTextColumn Header="Ver（上下）"
                                 Binding="{Binding Ver, UpdateSourceTrigger=PropertyChanged}"
                                 Width="*"/>

@@ -7,16 +7,18 @@ namespace NoRecoil.Core;
 /// <summary>
 /// 后台鼠标宏引擎：
 ///   - L 键按下瞬间切换总开关（ON/OFF）；
-///   - 总开关为 ON 且按住鼠标左键时激活宏，松开左键立即取消；
-///   - 每次激活最多持续 sustain 毫秒，结束后必须松开左键才能再次激活；
+///   - 触发方式可选：仅左键 / 左键+右键 / 数字键X + 左键+右键；
+///   - 每次激活最多持续 sustain 毫秒，结束后必须松开触发键才能再次激活；
 ///   - 每次触发按 smooth 段平滑移动，步数用完后保持最后一步；
-///   - sustain 为毫秒；Rad > 0 时每次触发随机往某一方向添加 0~Rad 偏移。
+///   - time4S 为每分钟触发次数；Rad > 0 时每次触发随机往某一方向添加 0~Rad 偏移。
 /// </summary>
 public sealed class MacroEngine
 {
   private const uint MOUSEEVENTF_MOVE = 0x0001;
   private const int VK_L = 0x4C;          // 键盘 L 键（总开关）
-  private const int VK_LBUTTON = 0x01;    // 鼠标左键（激活）
+  private const int VK_LBUTTON = 0x01;    // 鼠标左键
+  private const int VK_RBUTTON = 0x02;    // 鼠标右键
+  private const int VK_0 = 0x30;          // 主键盘数字键 0（1~9 依次递增）
 
   [DllImport("user32.dll")]
   private static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, UIntPtr dwExtraInfo);
@@ -32,6 +34,10 @@ public sealed class MacroEngine
   private volatile bool _running;
   private volatile bool _masterOn;
   private volatile Profile? _profile;
+  private volatile TriggerMode _triggerMode = TriggerMode.LeftButton;
+  private volatile int _triggerDigit = 1;      // 模式3 的目标数字键 X（0-9）
+  private volatile int _lastDigit = -1;        // 最近一次按下的主键盘数字键
+  private readonly bool[] _prevDigitDown = new bool[10];
 
   /// <summary>总开关状态变化事件（后台线程触发）。</summary>
   public event Action<bool>? MasterChanged;
@@ -44,6 +50,12 @@ public sealed class MacroEngine
 
   /// <summary>设置当前使用的配置文件（快照，运行中替换安全）。</summary>
   public void SetProfile(Profile profile) => _profile = profile;
+
+  /// <summary>触发方式（UI 线程设置）。</summary>
+  public TriggerMode TriggerMode { get => _triggerMode; set => _triggerMode = value; }
+
+  /// <summary>模式3 的目标数字键 X（0-9，主键盘）。</summary>
+  public int TriggerDigit { get => _triggerDigit; set => _triggerDigit = value; }
 
   public void Start()
   {
@@ -63,24 +75,53 @@ public sealed class MacroEngine
     bool lastL = false;
     while (_running)
     {
-      // L 键按下瞬间切换总开关
+      // L 键按下瞬间切换总开关；记录最近按下的主键盘数字键
       lastL = PollMasterToggle(lastL);
+      PollLastDigit();
 
-      // 总开关开启且按住鼠标左键 -> 执行一次宏
-      if (_masterOn && IsKeyDown(VK_LBUTTON))
+      // 总开关开启且满足触发条件 -> 执行一次宏
+      if (_masterOn && IsTriggerActive())
       {
         RunPattern();
 
-        // 一次激活结束（sustain 超时或松开左键）后，必须等左键完全松开，
+        // 一次激活结束（sustain 超时或松开触发键）后，必须等触发键完全松开，
         // 否则按住不放会让 Loop 立刻重新激活，导致 sustain 形同虚设、一直执行。
-        while (_running && IsKeyDown(VK_LBUTTON))
+        while (_running && IsTriggerActive())
         {
           lastL = PollMasterToggle(lastL);
+          PollLastDigit();
           Thread.Sleep(5);
         }
       }
 
       Thread.Sleep(5);
+    }
+  }
+
+  /// <summary>当前是否满足触发条件（由触发方式决定）。</summary>
+  private bool IsTriggerActive()
+  {
+    bool left = IsKeyDown(VK_LBUTTON);
+    bool right = IsKeyDown(VK_RBUTTON);
+    return _triggerMode switch
+    {
+      TriggerMode.LeftRightButtons => left && right,
+      TriggerMode.LeftRightWithDigit => left && right && _lastDigit == _triggerDigit,
+      _ => left,
+    };
+  }
+
+  /// <summary>记录最近一次按下的主键盘数字键（仅 1~0）。</summary>
+  private void PollLastDigit()
+  {
+    for (int d = 0; d <= 9; d++)
+    {
+      bool down = IsKeyDown(VK_0 + d);
+      if (down && !_prevDigitDown[d])
+      {
+        _lastDigit = d;
+      }
+      _prevDigitDown[d] = down;
     }
   }
 
@@ -105,7 +146,7 @@ public sealed class MacroEngine
     }
 
     int smooth = profile.Smooth < 1 ? 1 : profile.Smooth;
-    TimeSpan triggerInterval = TimeSpan.FromSeconds(1.0 / profile.Time4S);
+    TimeSpan triggerInterval = TimeSpan.FromSeconds(60.0 / profile.Time4S); // time4S 为每分钟次数
     TimeSpan maxDuration = TimeSpan.FromMilliseconds(profile.Sustain);
 
     ActiveChanged?.Invoke(true);
@@ -114,7 +155,7 @@ public sealed class MacroEngine
 
     try
     {
-      while (_running && _masterOn && IsKeyDown(VK_LBUTTON) && sw.Elapsed < maxDuration)
+      while (_running && _masterOn && IsTriggerActive() && sw.Elapsed < maxDuration)
       {
         // 步数用完后保持最后一步
         MoveStep step = profile.Steps[Math.Min(stepIndex, profile.Steps.Count - 1)];
@@ -151,14 +192,14 @@ public sealed class MacroEngine
 
           // 精确按 time4S × smooth 的频率等待下一小段
           TimeSpan nextAt = stepStart + triggerInterval / smooth * (seg + 1);
-          while (_running && _masterOn && IsKeyDown(VK_LBUTTON)
+          while (_running && _masterOn && IsTriggerActive()
                  && sw.Elapsed < nextAt && sw.Elapsed < maxDuration)
           {
             Thread.Sleep(1);
           }
 
           // 若已被取消/超时/总开关关闭，立即结束本次触发
-          if (!(_running && _masterOn && IsKeyDown(VK_LBUTTON) && sw.Elapsed < maxDuration))
+          if (!(_running && _masterOn && IsTriggerActive() && sw.Elapsed < maxDuration))
           {
             return;
           }

@@ -18,6 +18,8 @@ public partial class MainWindow : Window
   private string? _editingPath; // 编辑器当前编辑的配置文件（保存目标）
   private string? _currentPath; // 当前正在使用的配置文件（引擎）
   private bool _quickSwitchArmed; // O 键已按下，等待数字键
+  private readonly AppSettings _appSettings = SettingsStore.Load();
+  private bool _suppressUiEvents; // 初始化时抑制 UI 事件回写
 
   public MainWindow()
   {
@@ -28,6 +30,9 @@ public partial class MainWindow : Window
     _engine.ActiveChanged += OnActiveChanged;
     Loaded += (_, _) => _engine.Start();
     Closed += (_, _) => _engine.Stop();
+
+    DigitCombo.ItemsSource = new[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
+    ApplyAppSettingsToUi();
 
     RefreshProfiles();
     UpdateMasterStatus(_engine.MasterOn);
@@ -139,15 +144,21 @@ public partial class MainWindow : Window
     {
       _steps.Add(new StepItem { Ver = step.Ver, Hor = step.Hor });
     }
+    RenumberSteps();
   }
 
-  private void BtnAddStep_Click(object sender, RoutedEventArgs e) => _steps.Add(new StepItem());
+  private void BtnAddStep_Click(object sender, RoutedEventArgs e)
+  {
+    _steps.Add(new StepItem());
+    RenumberSteps();
+  }
 
   private void BtnRemoveStep_Click(object sender, RoutedEventArgs e)
   {
     if (StepsGrid.SelectedItem is StepItem item)
     {
       _steps.Remove(item);
+      RenumberSteps();
     }
   }
 
@@ -262,6 +273,70 @@ public partial class MainWindow : Window
   }
 
   private void BtnRefresh_Click(object sender, RoutedEventArgs e) => RefreshProfiles();
+
+  // ---------- 触发方式（全局设置） ----------
+
+  private void ApplyAppSettingsToUi()
+  {
+    _suppressUiEvents = true;
+    _engine.TriggerMode = _appSettings.Mode;
+    _engine.TriggerDigit = _appSettings.TriggerDigit;
+    DigitCombo.SelectedIndex = _appSettings.TriggerDigit == 0 ? 9 : _appSettings.TriggerDigit - 1;
+    switch (_appSettings.Mode)
+    {
+      case TriggerMode.LeftRightButtons:
+        RbtLeftRight.IsChecked = true;
+        break;
+      case TriggerMode.LeftRightWithDigit:
+        RbtLeftRightDigit.IsChecked = true;
+        break;
+      default:
+        RbtLeftOnly.IsChecked = true;
+        break;
+    }
+    _suppressUiEvents = false;
+  }
+
+  private void TriggerMode_Changed(object sender, RoutedEventArgs e)
+  {
+    if (_suppressUiEvents)
+    {
+      return;
+    }
+    if (RbtLeftRight.IsChecked == true)
+    {
+      _appSettings.Mode = TriggerMode.LeftRightButtons;
+    }
+    else if (RbtLeftRightDigit.IsChecked == true)
+    {
+      _appSettings.Mode = TriggerMode.LeftRightWithDigit;
+    }
+    else
+    {
+      _appSettings.Mode = TriggerMode.LeftButton;
+    }
+    _engine.TriggerMode = _appSettings.Mode;
+    SettingsStore.Save(_appSettings);
+  }
+
+  private void DigitCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+  {
+    if (_suppressUiEvents || DigitCombo.SelectedIndex < 0)
+    {
+      return;
+    }
+    _appSettings.TriggerDigit = DigitCombo.SelectedIndex == 9 ? 0 : DigitCombo.SelectedIndex + 1;
+    _engine.TriggerDigit = _appSettings.TriggerDigit;
+    SettingsStore.Save(_appSettings);
+  }
+
+  private void RenumberSteps()
+  {
+    for (int i = 0; i < _steps.Count; i++)
+    {
+      _steps[i].Index = i + 1;
+    }
+  }
 
   // ---------- 快捷键：O + 数字键 快速切换配置 ----------
 

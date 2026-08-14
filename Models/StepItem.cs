@@ -6,8 +6,22 @@ namespace NoRecoil.Models;
 /// <summary>DataGrid 中可编辑的步数项（支持绑定通知）。</summary>
 public sealed class StepItem : INotifyPropertyChanged
 {
+  private int _index;
   private int _ver;
   private int _hor;
+
+  public int Index
+  {
+    get => _index;
+    set
+    {
+      if (_index != value)
+      {
+        _index = value;
+        OnPropertyChanged();
+      }
+    }
+  }
 
   public int Ver
   {

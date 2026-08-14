@@ -5,8 +5,8 @@ namespace NoRecoil.Models;
 /// <summary>一个配置文件（对应 JsonRAW 下的一个 .json）。</summary>
 public sealed class Profile
 {
-  /// <summary>每秒触发次数。</summary>
-  public int Time4S { get; set; } = 8;
+  /// <summary>每分钟触发次数。</summary>
+  public int Time4S { get; set; } = 600;
 
   /// <summary>每次激活最多持续毫秒数。</summary>
   public int Sustain { get; set; } = 2000;
