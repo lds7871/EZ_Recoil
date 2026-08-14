@@ -1,4 +1,4 @@
-namespace NoRecoil.Models;
+namespace EZRecoil.Models;
 
 /// <summary>触发方式。</summary>
 public enum TriggerMode

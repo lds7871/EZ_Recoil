@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text.Json;
-using NoRecoil.Models;
+using EZRecoil.Models;
 
-namespace NoRecoil.Core;
+namespace EZRecoil.Core;
 
 /// <summary>
 /// 全局应用设置读写。存于 JsonRAW/.settings（不带 .json 后缀，

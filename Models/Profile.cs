@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace NoRecoil.Models;
+namespace EZRecoil.Models;
 
 /// <summary>一个配置文件（对应 JsonRAW 下的一个 .json）。</summary>
 public sealed class Profile

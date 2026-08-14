@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace NoRecoil.Models;
+namespace EZRecoil.Models;
 
 /// <summary>DataGrid 中可编辑的步数项（支持绑定通知）。</summary>
 public sealed class StepItem : INotifyPropertyChanged

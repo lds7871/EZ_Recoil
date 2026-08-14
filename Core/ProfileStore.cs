@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text.Json;
-using NoRecoil.Models;
+using EZRecoil.Models;
 
-namespace NoRecoil.Core;
+namespace EZRecoil.Core;
 
 /// <summary>
 /// JsonRAW 文件夹下配置文件（.json）的读写、新增、快速切换管理。

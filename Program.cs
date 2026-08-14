@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace NoRecoil;
+namespace EZRecoil;
 
 /// <summary>
 /// WPF GUI 入口：创建 Application 并显示主窗口。

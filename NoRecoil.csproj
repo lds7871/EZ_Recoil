@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <RootNamespace>NoRecoil</RootNamespace>
-    <AssemblyName>NoRecoil</AssemblyName>
+    <RootNamespace>EZRecoil</RootNamespace>
+    <AssemblyName>EZRecoil</AssemblyName>
     <Version>1.0.0</Version>
     <ApplicationIcon>WFP.ico</ApplicationIcon>
   </PropertyGroup>

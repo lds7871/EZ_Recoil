@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using NoRecoil.Models;
+using EZRecoil.Models;
 
-namespace NoRecoil.Core;
+namespace EZRecoil.Core;
 
 /// <summary>
 /// 后台鼠标宏引擎：

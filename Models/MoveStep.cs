@@ -1,4 +1,4 @@
-namespace NoRecoil.Models;
+namespace EZRecoil.Models;
 
 /// <summary>每一步触发的鼠标移动参数。</summary>
 public sealed class MoveStep
