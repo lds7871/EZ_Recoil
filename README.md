@@ -13,9 +13,15 @@
 ---
 <div align="center">
 
-  <video src="ReadmeFile/video.mp4" controls="controls" style="max-width: 100%; border-radius: 8px;"></video>
+  ![演示动图](ReadmeFile/video.gif)
 
-  **演示视频-若无法观看点击上方ReadmeFile文件夹**
+  **演示动图-R6S/PUBG/CS/BF6**
+
+---
+
+  ![软件界面](ReadmeFile/index.png)
+
+  **软件界面预览**
 
 </div>
 
@@ -25,4 +31,4 @@
 - 本软件**仅供学习与技术研究交流使用**，请勿将其用于任何违反游戏运营规则或国家法律法规的用途。
 - 使用本软件所产生的一切后果（包括但不限于账号封禁、设备损坏、法律纠纷等）**由使用者自行承担**。
 - 作者不对本软件的功能性、适用性及由此产生的任何直接或间接损失负责。
-- 请勿在任何正式游戏对局中使用；请在下载后 **24 小时内**删除并支持正版。
+- 请勿在任何正式游戏对局中使用。
