@@ -4,7 +4,7 @@
         Title="EZ_Recoil"
         Icon="pack://application:,,,/EZ_Recoil.ico"
         Height="660"
-        Width="780"
+        Width="800"
         WindowStartupLocation="CenterScreen">
   <Grid Margin="12">
     <Grid.RowDefinitions>
@@ -200,6 +200,11 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,8,0,0">
+          <Button x:Name="BtnTrajectory"
+                  Content="轨迹图"
+                  Padding="10,5"
+                  Margin="0,0,6,0"
+                  Click="BtnTrajectory_Click"/>
           <Button x:Name="BtnAddStep"
                   Content="＋ 添加步数"
                   Padding="10,5"

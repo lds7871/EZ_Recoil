@@ -153,6 +153,26 @@ public partial class MainWindow : Window
     RenumberSteps();
   }
 
+  // ---------- 轨迹图 ----------
+
+  private void BtnTrajectory_Click(object sender, RoutedEventArgs e)
+  {
+    // 取编辑器当前（可能未保存）的参数与步数绘制轨迹
+    var steps = _steps.Select(s => new MoveStep { Ver = s.Ver, Hor = s.Hor }).ToList();
+    var window = new TrajectoryWindow(
+      steps,
+      ParseOrZero(Time4SText.Text),
+      ParseOrZero(SustainText.Text),
+      ParseOrZero(SmoothText.Text),
+      ParseOrZero(RadText.Text))
+    {
+      Owner = this,
+    };
+    window.ShowDialog();
+  }
+
+  private static int ParseOrZero(string? text) => int.TryParse(text, out int value) ? value : 0;
+
   private void BtnRemoveStep_Click(object sender, RoutedEventArgs e)
   {
     if (StepsGrid.SelectedItem is StepItem item)
