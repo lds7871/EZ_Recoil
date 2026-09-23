@@ -28,7 +28,7 @@
                    Foreground="#AAAAAA"
                    TextWrapping="Wrap"
                    Margin="0,4,0,0"/>
-        <TextBlock Text="横轴 Hor（正右负左）、纵轴 Ver（正下负上），与鼠标实际移动方向一致；反向轨迹为正向轨迹关于起点的镜像（每一步取反方向）。"
+        <TextBlock Text=" "
                    Foreground="#888888"
                    TextWrapping="Wrap"
                    Margin="0,4,0,0"/>

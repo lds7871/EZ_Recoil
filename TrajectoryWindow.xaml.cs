@@ -188,7 +188,7 @@ public partial class TrajectoryWindow : Window
     }
     AddDot(ToScreen(new Point(0, 0)), Brushes.White, OriginBrush, OriginRadius, 2); // 起点画在最上层
 
-    ScaleText.Text = $"网格 1 格 = {_gridStep:0.##} 像素移动　｜　共 {_steps.Count} 个参数点（不含起点）";
+    ScaleText.Text = $"网格 1 格 = {_gridStep:0.##} 像素移动　｜　共 {_steps.Count} 个参数点";
   }
 
   /// <summary>选择让每格不小于 MinGridPixels 的“整齐”网格步长。</summary>
