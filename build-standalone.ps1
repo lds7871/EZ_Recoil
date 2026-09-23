@@ -7,7 +7,7 @@
 $ErrorActionPreference = 'Stop'
 
 Write-Host "正在发布独立可执行程序（win-x64，自包含单文件）..." -ForegroundColor Cyan
-dotnet publish .\NoRecoil.csproj -c Release -r win-x64 --self-contained true `
+dotnet publish .\EZ_Recoil.csproj -c Release -r win-x64 --self-contained true `
     -p:PublishSingleFile=true `
     -o .\publish\win-x64
 

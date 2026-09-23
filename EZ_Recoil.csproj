@@ -9,7 +9,7 @@
     <RootNamespace>EZRecoil</RootNamespace>
     <AssemblyName>EZRecoil</AssemblyName>
     <Version>1.0.0</Version>
-    <ApplicationIcon>WFP.ico</ApplicationIcon>
+    <ApplicationIcon>EZ_Recoil.ico</ApplicationIcon>
   </PropertyGroup>
 
   <!-- 独立发布设置：指定 -r win-x64 时自动启用 自包含 + 单文件 -->
@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <None Include="JsonRAW\**" CopyToOutputDirectory="PreserveNewest" />
-    <Resource Include="WFP.ico" />
+    <Resource Include="EZ_Recoil.ico" />
   </ItemGroup>
 
 </Project>

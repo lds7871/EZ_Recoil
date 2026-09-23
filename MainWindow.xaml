@@ -1,8 +1,8 @@
 <Window x:Class="EZRecoil.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Worry-Free Recoil"
-        Icon="pack://application:,,,/WFP.ico"
+        Title="EZ_Recoil"
+        Icon="pack://application:,,,/EZ_Recoil.ico"
         Height="660"
         Width="780"
         WindowStartupLocation="CenterScreen">
