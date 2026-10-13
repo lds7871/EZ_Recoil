@@ -83,7 +83,7 @@ public partial class TrajectoryWindow : Window
   private void UpdateSummary()
   {
     SummaryText.Text =
-      $"步数 {_steps.Count} ｜ time4S {_time4S} 次/分钟 ｜ sustain {_sustain} 毫秒 ｜ smooth {_smooth} 段/次 ｜ rad {_rad}";
+      $"步数 {_steps.Count} ｜ 射速 {_time4S} 每分钟 ｜ 总时长 {_sustain} 毫秒 ｜ 平滑度 {_smooth} 段 ｜ 随机度 {_rad} 像素";
 
     if (_steps.Count > 0)
     {
@@ -101,7 +101,7 @@ public partial class TrajectoryWindow : Window
     if (_rad > 0)
     {
       RadHintText.Text =
-        $"rad = {_rad}：实际运行时每次触发会随机向 上/下/左/右 之一额外偏移 0~{_rad} 像素，图中绘制的是不含随机偏移的基准轨迹。";
+        $"随机度 = {_rad}：实际运行时每次触发会随机向 上/下/左/右 之一额外偏移 0~{_rad} 像素，图中绘制的是不含随机偏移的基准轨迹。";
       RadHintText.Visibility = Visibility.Visible;
     }
     else

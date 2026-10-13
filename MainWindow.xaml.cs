@@ -192,22 +192,22 @@ public partial class MainWindow : Window
 
     if (!int.TryParse(Time4SText.Text, out int time4S) || time4S <= 0)
     {
-      MessageBox.Show("time4S 必须是大于 0 的整数。", "输入错误");
+      MessageBox.Show("射速必须是大于 0 的整数。", "输入错误");
       return;
     }
     if (!int.TryParse(SustainText.Text, out int sustain) || sustain <= 0)
     {
-      MessageBox.Show("sustain 必须是大于 0 的整数。", "输入错误");
+      MessageBox.Show("总时长必须是大于 0 的整数。", "输入错误");
       return;
     }
     if (!int.TryParse(SmoothText.Text, out int smooth) || smooth < 1)
     {
-      MessageBox.Show("smooth 必须是不小于 1 的整数。", "输入错误");
+      MessageBox.Show("平滑度必须是不小于 1 的整数。", "输入错误");
       return;
     }
     if (!int.TryParse(RadText.Text, out int rad) || rad < 0)
     {
-      MessageBox.Show("rad 必须是不小于 0 的整数。", "输入错误");
+      MessageBox.Show("随机度必须是不小于 0 的整数。", "输入错误");
       return;
     }
 
