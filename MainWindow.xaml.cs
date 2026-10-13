@@ -173,6 +173,18 @@ public partial class MainWindow : Window
 
   private static int ParseOrZero(string? text) => int.TryParse(text, out int value) ? value : 0;
 
+  // ---------- 总时长计算 ----------
+
+  private void BtnDurationCalc_Click(object sender, RoutedEventArgs e)
+  {
+    // 用编辑器里当前的射速预填，方便直接算
+    var window = new DurationCalcWindow(ParseOrZero(Time4SText.Text))
+    {
+      Owner = this,
+    };
+    window.ShowDialog();
+  }
+
   private void BtnRemoveStep_Click(object sender, RoutedEventArgs e)
   {
     if (StepsGrid.SelectedItem is StepItem item)

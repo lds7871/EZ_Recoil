@@ -196,31 +196,39 @@
           </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Row="3"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,8,0,0">
-          <Button x:Name="BtnTrajectory"
-                  Content="轨迹图"
+        <DockPanel Grid.Row="3"
+                   Margin="0,8,0,0">
+          <!-- 左侧：总时长计算（与右侧的编辑按钮分列两端） -->
+          <Button x:Name="BtnDurationCalc"
+                  DockPanel.Dock="Left"
+                  Content="总时长计算"
+                  VerticalAlignment="Center"
                   Padding="10,5"
-                  Margin="0,0,6,0"
-                  Click="BtnTrajectory_Click"/>
-          <Button x:Name="BtnAddStep"
-                  Content="＋ 添加步数"
-                  Padding="10,5"
-                  Margin="0,0,6,0"
-                  Click="BtnAddStep_Click"/>
-          <Button x:Name="BtnRemoveStep"
-                  Content="－ 删除选中"
-                  Padding="10,5"
-                  Margin="0,0,18,0"
-                  Click="BtnRemoveStep_Click"/>
-          <Button x:Name="BtnSave"
-                  Content="保存"
-                  FontWeight="Bold"
-                  Padding="20,5"
-                  Click="BtnSave_Click"/>
-        </StackPanel>
+                  Click="BtnDurationCalc_Click"/>
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Right">
+            <Button x:Name="BtnTrajectory"
+                    Content="轨迹图"
+                    Padding="10,5"
+                    Margin="0,0,6,0"
+                    Click="BtnTrajectory_Click"/>
+            <Button x:Name="BtnAddStep"
+                    Content="＋ 添加步数"
+                    Padding="10,5"
+                    Margin="0,0,6,0"
+                    Click="BtnAddStep_Click"/>
+            <Button x:Name="BtnRemoveStep"
+                    Content="－ 删除选中"
+                    Padding="10,5"
+                    Margin="0,0,18,0"
+                    Click="BtnRemoveStep_Click"/>
+            <Button x:Name="BtnSave"
+                    Content="保存"
+                    FontWeight="Bold"
+                    Padding="20,5"
+                    Click="BtnSave_Click"/>
+          </StackPanel>
+        </DockPanel>
       </Grid>
     </GroupBox>
   </Grid>

@@ -1,0 +1,81 @@
+<Window x:Class="EZRecoil.DurationCalcWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="总时长计算 - EZ_Recoil"
+        Icon="pack://application:,,,/EZ_Recoil.ico"
+        Width="380"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+  <Grid Margin="14">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Grid.Column="0"
+               Text="射速（每分钟）"
+               VerticalAlignment="Center"
+               Margin="0,0,8,8"/>
+    <TextBox x:Name="RateText"
+             Grid.Row="0"
+             Grid.Column="1"
+             Margin="0,0,0,8"
+             VerticalContentAlignment="Center"
+             TextChanged="Input_TextChanged"/>
+
+    <TextBlock Grid.Row="1"
+               Grid.Column="0"
+               Text="子弹数量"
+               VerticalAlignment="Center"
+               Margin="0,0,8,8"/>
+    <TextBox x:Name="BulletText"
+             Grid.Row="1"
+             Grid.Column="1"
+             Margin="0,0,0,8"
+             VerticalContentAlignment="Center"
+             TextChanged="Input_TextChanged"/>
+
+    <TextBlock Grid.Row="2"
+               Grid.Column="0"
+               Text="总时长（毫秒）"
+               VerticalAlignment="Center"
+               Margin="0,0,8,0"/>
+    <!-- 只做可选文本框：可选中后按 Ctrl+C 复制，不直接写剪贴板 -->
+    <TextBox x:Name="ResultText"
+             Grid.Row="2"
+             Grid.Column="1"
+             IsReadOnly="True"
+             FontSize="16"
+             FontWeight="Bold"
+             Background="#F2F2F2"
+             VerticalContentAlignment="Center"
+             Padding="6,4"
+             ToolTip="可选中数字后按 Ctrl+C 复制"/>
+
+    <TextBlock x:Name="StatusText"
+               Grid.Row="3"
+               Grid.Column="1"
+               Foreground="#777777"
+               TextWrapping="Wrap"
+               Margin="0,8,0,0"/>
+
+    <Button Grid.Row="4"
+            Grid.Column="1"
+            Content="关闭"
+            Width="76"
+            Padding="0,5"
+            HorizontalAlignment="Right"
+            Margin="0,14,0,0"
+            Click="BtnClose_Click"/>
+  </Grid>
+</Window>
